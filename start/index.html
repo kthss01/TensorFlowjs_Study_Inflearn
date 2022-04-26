@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>TensorFlow.js 시작하기</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <script>
+            // Tensor 생성
+            const t1 = tf.scalar(1);
+            tf.print(t1);
+            const t2 = tf.scalar(2);
+            // 생성시 id 0부터 부여
+            // console.log와 같음
+            tf.print(`t1-id: ${t1.id}`);
+            tf.print(`t2-id: ${t2.id}`);
+
+            // Tensor 더하기
+            // t1 + 1 이런거 안됨
+            // Tensor + Tensor만 가능
+            const t4 = tf.add(t1, t2);
+            tf.print(t4);
+            t4.print(true); // true 넣으면 구조까지 출력
+            tf.print(t1.add(t2));
+
+            // Tensor 나누기
+            const t3 = tf.scalar(5);
+            const t5 = tf.add(t1, t2).div(t3); // chain 가능
+            tf.print(t5); // 자바스크립트 특성으로 0.6000000238418579 출력
+            // ieee754 부동 소수점 (floating pointing) 룰 따름
+        </script>
+    </body>
+</html>
