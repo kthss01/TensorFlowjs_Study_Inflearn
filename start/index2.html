@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Tensor 생성</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- code 1 -->
+        <script>
+            /* values */
+            // 파라미터에 배열로 값을 작성
+            tf.print(tf.tensor([1, 2, 3]));
+            // 3개의 엘리먼트를 가진 TypedArray 인스턴스를 생성
+            const one = new Uint8Array(3);
+            // 각 엘리먼트는 양수로 1바이트 값을 가질 수 있음
+            one[0] = 100;
+            one[1] = 200;
+            // 따라서 one의 바이트 수는 3
+            tf.print(tf.tensor(one));
+        </script>
+
+        <!-- code 2 -->
+        <script>
+            /* shape */
+            // 1차원 배열 [1,2,3,4,5,6]을
+            const list = [1, 2, 3, 4, 5, 6];
+            // [2, 3]에서 엘리먼트가 2개 이므로 2차원 배열로 변환
+            // 1차원 배열이 2개이고 1차원 배열에 엘리먼트가 3개
+            tf.print(tf.tensor(list, [2, 3]));
+            // [3, 2]에서 엘리먼트가 2개이므로 2차원 배열로 변환
+            // 1차원 배열이 3개이고 1차원 배열에 엘리먼트가 2개
+            tf.print(tf.tensor(list, [3, 2]));
+        </script>
+
+        <!-- code 3 -->
+        <script>
+            /* dtype: bool */
+            // tf.tensor1d() : 1차원 배열을 사용하는 함수
+            // 함수 이름에 rank 시맨틱을 갖고 있으므로
+            // tf.tensor()보다 tf.tensor1d() 사용을 권장
+
+            // 3번째 파라미터에 bool 작성
+            // default "float32"
+            // 배열의 엘리먼트 값이 0이면 false으로 변환
+            // 아니면 true로 변환하여 tf.Tensor에 저장
+            tf.print(tf.tensor1d([5, -3, 0], "bool"));
+
+            tf.tensor([1, 2, 3, 4], [2, 2]).print();
+        </script>
+
+        <script>
+            const two = tf.tensor2d([1, 2, 3, 4, 5, 6], [3, 2]);
+            /*
+                개발자 도구에서 rank, shape, dtype, id 등을 볼 수 있음
+                개발자 도구에서 값이 표시되지 않음 [1,2,3,4,5,6]
+            */
+            tf.print(two);
+        </script>
+    </body>
+</html>
