@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>벡터 연산</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 엘리먼트 와이즈 element wise
+            엘리먼트끼리 연산하는거를 말함
+        -->
+        <!-- code 1 벡터 덧셈 -->
+        <script>
+            const one = tf.tensor1d([1, 3, 5]);
+            const two = tf.tensor1d([2, 4, 6]);
+            // 엘리먼트 수가 다르면 더할 수 없음
+            const result = tf.add(one, two);
+            tf.print(result);
+        </script>
+
+        <!-- 
+            브로드 케스팅
+            한쪽이 스칼라인 경우 모든 성분에 연산
+         -->
+        <!-- code 1 브로드캐스팅 -->
+        <script>
+            const one2 = tf.scalar(5); // 벡터 [5]로 작성하면 에러남
+            const two2 = tf.tensor1d([1, 3, 7]);
+            const result2 = one2.add(two2);
+            tf.print(result2);
+        </script>
+
+        <!-- 내적 innner(dot) product -->
+        <!-- code 1 내적 계산 -->
+        <script>
+            const one3 = tf.tensor1d([1, 2, 3]);
+            const two3 = tf.tensor1d([4, 5, 6]);
+            const result3 = tf.dot(one3, two3);
+            tf.print(result3); // 내적 결과는 스칼라
+        </script>
+
+        <!-- 외적 outer product -->
+        <!-- code 1 외적 계산 -->
+        <script>
+            const one4 = tf.tensor1d([1, 2, 3]);
+            const two4 = tf.tensor1d([4, 5, 6]);
+            const result4 = tf.outerProduct(one4, two4);
+            tf.print(result4);
+        </script>
+    </body>
+</html>
