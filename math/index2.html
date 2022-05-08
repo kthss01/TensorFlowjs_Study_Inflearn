@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>행렬 연산</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 행렬 덧셈 -->
+        <script>
+            const one = tf.tensor2d([1, 2, 3, 4], [2, 2]);
+            const two = tf.tensor2d([5, 6, 7, 8], [2, 2]);
+            // tf.Tensor의 shape에 따라 덧셈을 함
+            // shape 구조를 개발자가 맞춰 줘야 함
+            const result = tf.add(one, two);
+            tf.print(result);
+        </script>
+
+        <!-- 행렬 브로드캐스팅 -->
+        <script>
+            const one2 = tf.tensor2d([
+                [3, 4],
+                [5, 6],
+            ]);
+            const two2 = tf.scalar(1);
+            // one2의 모든 엘리먼트에 스칼라 1을 더함
+            const result2 = one2.add(two2);
+            tf.print(result2);
+        </script>
+
+        <!-- 행렬 브로드캐스팅2 -->
+        <script>
+            const one3 = tf.tensor2d([
+                [3, 4],
+                [5, 6],
+            ]);
+            const two3 = tf.tensor1d([1, 2]);
+            // 3 + 1, 4 + 2
+            // 5 + 1, 6 + 2
+            // two3 가 [1, 2, 3]이면 엘리먼트 수가 맞지 않아 에러 발생
+            const result3 = one3.add(two3);
+            tf.print(result3);
+        </script>
+
+        <!-- 엘리먼트 와이즈 곱셈 -->
+        <script>
+            const one4 = tf.tensor2d([
+                [1, 2],
+                [3, 4],
+            ]);
+            const two4 = tf.tensor2d([[5], [6]]);
+            // tf.mul() 함수는 엘리먼트 와이즈 방법으로 곱함
+            // 엘리먼트 와이즈는 값을 더하지 않고 곱한 값을 그대로 반환
+            // 반면, 내적은 값을 더함
+            const result4 = tf.mul(one4, two4);
+            tf.print(result4);
+            /*
+                [[5, 10]
+                 [18, 24]]
+            */
+        </script>
+
+        <!-- 엘리머트 와이즈 나눗셈 -->
+        <script>
+            const one5 = tf.tensor2d([
+                [1, 2],
+                [3, 4],
+            ]);
+            const two5 = tf.tensor2d([[5], [6]]);
+            const result5 = tf.div(one5, two5);
+            tf.print(result5);
+        </script>
+
+        <!-- 행렬 내적 곱셈 -->
+        <script>
+            const one6 = tf.tensor2d([
+                [1, 2],
+                [3, 4],
+            ]);
+            const two6 = tf.tensor2d([[5], [6]]);
+            // tf.matMul() 함수는 내적 방법으로 곱하고 더함
+            const result6 = tf.matMul(one6, two6);
+            tf.print(result6);
+            /*
+                [[17],
+                 [39]]
+            */
+        </script>
+
+        <!-- 행렬 내적 곱셈2 -->
+        <script>
+            const one7 = tf.tensor2d([
+                [1, 2],
+                [3, 4],
+            ]);
+            const two7 = tf.tensor2d([
+                [5, 6],
+                [7, 8],
+            ]);
+            const result7 = tf.matMul(one7, two7);
+            tf.print(result7);
+            /*
+                [[19, 22],
+                 [43, 50]]
+            */
+        </script>
+    </body>
+</html>
