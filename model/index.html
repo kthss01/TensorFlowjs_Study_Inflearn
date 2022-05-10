@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>데이터 정의</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+        <script src="../web.js"></script>
+        <script src="../data/iris/iris_data_js.js"></script>
+    </head>
+    <body>
+        <!-- 학습 데이터 정의 -->
+        <script>
+            // 학습에 사용할 데이터 정의
+            // getData() 함수에서 데이터 반환
+            const dataX = web.iris.getData("x", [2, 3]);
+            const dataY = web.iris.getData("y", 4);
+        </script>
+
+        <!-- 정규화 코드 형태 -->
+        <script>
+            const dataX2 = web.iris.getData("x", [2, 3]);
+            const trainX = tf.tensor2d(dataX);
+
+            const dataY2 = web.iris.getData("y", 4);
+            const trainY = dataY.map((name) => {
+                return name === "abc" ? 1 : 2;
+            });
+        </script>
+    </body>
+</html>
