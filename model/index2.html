@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>예측 모델, 손실함수, 평균제곱오차, 옵티마이저</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 예측값을 구하는 모델 코드 -->
+        <script>
+            /*
+            varWeight.mul(dataX).add(varBias)
+                가중치에 X 데이터를 곱하고 바이어스를 더함
+            가중치와 바이어스는 학습을 반복할 때마다
+                TF.js에서 업데이트 함
+            const pred = predict(trainX)    
+                predict() 함수에 학습 X 데이터를 파라미터로
+                넘겨주면 학습 예측값이 반환되고
+            테스트 X 데이터를 넘겨주면
+                테스트 예측값이 반환됨
+            예측값을 구하는 방법은 학습과 테스트가 같음
+        */
+            // varWeight와 varBias는 tf.variable로 선언되어있음
+            function predict(dataX) {
+                return varWeight.mul(dataX).add(varBias);
+            }
+            // 설명을 위해 한번 했지만 for 문을 통해 반복하게됨
+            const pred = predict(trainX);
+        </script>
+
+        <!-- 손실함수 코드 형태 -->
+        <script>
+            /*
+                const cost = loss(pred, trainY);
+                    손실함수 값을 구하는 함수를 호출
+                predict() 함수의 pred 파라미터에
+                    구한 예측값 y^(hat)을 작성하고
+                trainY 파라미터에 학습 Y 데이터를 작성
+                predict.sub(dataY).square().mean()
+                    예측값 y^에서 학습 Y값을 빼고
+                    결과값을 제곱하여 평균을 구함
+                이렇게 구한 값이 손실함수 값
+            */
+            function loss(predict, dataY) {
+                return predict.sub(dataY).square().mean();
+            }
+            const cost = loss(pred, trainY);
+        </script>
+
+        <!-- 옵티마이저 코드 형태 -->
+        <script>
+            // Adma 옵티마이저를 생성하는 형태
+            // 옵티마이저에 따라 하이퍼파라미터가 다름
+            // default 값이 있지만 설명을 위해 작성함
+            const learningRate = 0.05;
+            const beta1 = 0.9;
+            const beta2 = 0.999;
+            const epsilon = 0.1;
+            const optimizer = tf.train.adam(
+                learningRate,
+                beta1,
+                beta2,
+                epsilon
+            );
+        </script>
+    </body>
+</html>
