@@ -17,6 +17,7 @@
             // getData() 함수에서 데이터 반환
             const dataX = web.iris.getData("x", [2, 3]);
             const dataY = web.iris.getData("y", 4);
+            console.log(dataX, dataY);
         </script>
 
         <!-- 정규화 코드 형태 -->
@@ -28,6 +29,61 @@
             const trainY = dataY.map((name) => {
                 return name === "abc" ? 1 : 2;
             });
+            console.log(trainX, trainY);
+        </script>
+
+        <!-- 가중치, 바이어스 초기값 -->
+        <script>
+            // 변수에 초깃값을 할당하는 형태
+            const batchSize = 25;
+
+            // weight bias tf.Tensor 형태
+            const weight = tf.variable(
+                // 정규분포가 평균이 0이고 표준편차 1인 난수를 추출하여 반환
+                // 700은 seed
+                tf.randomNormal([1], 0, 1, "float32", 700)
+            );
+
+            // 참고 random 하게 추출한 값을 통계에서는 sample value라고 함
+            // seed를 사용하면 브라우저를 재시작해도 같은 값이 추출됨
+
+            // tf.variable()
+            // TF.js 내부와 공유할 변수를 선언
+            // TF.js 내부에서 변수에 값을 업데이트
+            // 반환된 나수를 변수에 초깃값으로 할당
+            const bias = tf.variable(
+                tf.randomNormal([1], 0, 1, "float32", 710)
+            );
+        </script>
+
+        <!-- tf.variable -->
+        <script>
+            const x = tf.variable(tf.tensor([1, 2, 3]));
+            x.print();
+
+            // x의 값을 tensor의 값으로 바꿈
+            x.assign(tf.tensor([4, 5, 6]));
+
+            x.print();
+        </script>
+
+        <!-- 하이퍼파라미터 -->
+        <script>
+            const learningRate = 0.05;
+            const beta1 = 0.9;
+            const beta2 = 0.999;
+            const epsilon = 0.1;
+
+            // Adam 옵티마이저를 생성하는 코드
+            // 옵티마이저는 최적화를 위한 함수
+            // 모델 학습 전체에 영향을 미치므로 하이퍼 파라미터
+            // 일반적으로 leraningRate 0.05와 0.01은 학습결과가 다름
+            const optimizer = tf.train.adam(
+                learningRate,
+                beta1,
+                beta2,
+                epsilon
+            );
         </script>
     </body>
 </html>
