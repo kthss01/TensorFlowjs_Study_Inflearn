@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>모델 학습</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 모델 학습 코드 형태 -->
+        <script>
+            const predict = (dataX) => {
+                return weight.mul(dataX).add(bias);
+            };
+            const loss = (pred, dataY) => {
+                return pred.sub(dataY).square().mean();
+            };
+            const optimizer = tf.train.adam(0.05);
+            const train = () => {
+                for (let k = 0; k < 500; k++) {
+                    // 반복할 때마다 weight bias 값 바뀌고 loss가 0에 가까워짐
+                    optimizer.minimize(() => {
+                        const pred = predict(trainDataX);
+                        return loss(pred, trainDataY);
+                    });
+                }
+            };
+            train();
+        </script>
+
+        <!-- 예측값 코드 형태 -->
+        <script>
+            const predict2 = (dataX) => {
+                return weight.mul(dataX).add(bias);
+            };
+
+            const pred = predict2(testX);
+        </script>
+    </body>
+</html>
