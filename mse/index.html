@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>손실함수 (MSE)</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 학습 데이터 정의, 초기값 설정 -->
+        <script>
+            const dataX = [1, 2, 3, 4, 5];
+            const dataY = [10, 20, 30, 40, 50];
+            const trainDataX = tf.tensor1d(dataX);
+            const trainDataY = tf.tensor1d(dataY);
+
+            const weight = tf.variable(
+                tf.randomNormal([1], 0, 1, "float32", 700)
+            );
+            const bias = tf.variable(
+                tf.randomNormal([1], 0, 1, "float32", 710)
+            );
+        </script>
+
+        <!-- 옵티마이저 -->
+        <script>
+            const learningRate = 0.05;
+            // sgd 옵티마이저는 하이퍼파라미터가 1개
+            const optimizer = tf.train.sgd(learningRate);
+        </script>
+
+        <!-- 예측값을 계산하여 반환 -->
+        <script>
+            /*
+                MSE에서 Wx + b에 해당
+                weight에 학습 X 데이터를 곱하고 bias 더함
+                처음 반복할 때는
+                    weight와 bias에 난수가 설정되지만
+                    두 번째부터는 옵티마이저의 minimize() 함수에서
+                    계산한 값이 설정됨
+            */
+            const predict = (dataX) => {
+                return weight.mul(dataX).add(bias);
+            };
+        </script>
+
+        <!-- 평균제곱오차로 손실함수 값 계산 -->
+        <script>
+            /*
+                MSE로 손실함수 값 구함
+                predict()에서 반환된 예측값 y^을 pred에 설정
+                예측값에서 학습 Y데이터 값을 빼고
+                    결과를 제곱하여 평균을 냄
+                square()까지는 element-wise 방법으로 값을 구함
+                mean()에서 제곱한 값을 모두 더해 평균을 구함
+                구한 평균을 옵티마이저의 minimize()에 반환하게 되며
+                tf.Tensor에 설정된 학습 데이터와
+                    손실함수를 구했던 mul(), add(), sub(), square(), mean() 함수의
+                    tf.Tensor에 설정된 값을 사용하여 가중치, 바이어스 구함
+            */
+            const loss = (pred) => {
+                return pred.sub(trainDataY).square().mean();
+            };
+        </script>
+    </body>
+</html>
