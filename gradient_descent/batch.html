@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>배치 경사 하강법</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 배치 경사 하강법 -->
+        <script>
+            const dataX = tf.tensor1d([1, 2, 3, 4, 5]);
+            const dataY = tf.tensor1d([10, 20, 30, 40, 50]);
+            const weight = tf.variable(tf.randomNormal([1]));
+            const bias = tf.variable(tf.randomNormal([1]));
+            const loss = (x, y) => {
+                const pred = weight.mul(x).add(bias);
+                return pred.sub(y).square().mean(); // mse
+            };
+            const learningRate = 0.01;
+            // 경사 하강법 옵티마이저 인스턴스 생성
+            const optimizer = tf.train.sgd(learningRate);
+            for (let k = 0; k < 5; k++) {
+                optimizer.minimize(() => {
+                    const cost = loss(dataX, dataY);
+                    tf.print(cost);
+                    return cost;
+                });
+            }
+        </script>
+    </body>
+</html>
