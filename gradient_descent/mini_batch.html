@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>미니배치 경사 하강법</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 미니배치 경사 하강법 -->
+        <script>
+            const learningRate = 0.01;
+            const optimizer = tf.train.sgd(learningRate);
+            const getIndex = (min, max, many) => {
+                const values = [];
+                for (let k = 0; k < many; k++) {
+                    values.push(Math.trunc((max - min) * Math.random()) + min);
+                }
+                return tf.tensor1d(values, "int32");
+            };
+            const batchSize = 20,
+                loop = 100;
+            for (let k = 0; k < loop; k++) {
+                optimizer.minimize(() => {
+                    const index = getIndex(0, 100, batchSize);
+                    const pred = predict(dataX.gather(index));
+                    return loss(pred, dataY.gather(index));
+                });
+            }
+        </script>
+    </body>
+</html>
