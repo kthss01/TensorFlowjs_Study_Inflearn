@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>L1 정규화 모델 코드</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 학습 데이터 정의 초기값 설ㅈ어 -->
+        <script>
+            const dataX = tensor.iris.getData("x", 3);
+            const dataY = tensor.iris.getData("y", 4);
+            const trainX = tf.tensor1d(dataX);
+            const trainY = tf.tensor1d(dataY);
+            const weight = tf.variable(
+                tf.randomNormal([1], 0, 1, "float32", 700)
+            );
+            const bias = tf.variable(
+                tf.randomNormal([1], 0, 1, "float32", 710)
+            );
+        </script>
+
+        <!-- 예측값, 손실함수 값 -->
+        <script>
+            const learningRate = 0.05;
+            const optimizer = tf.train.adam(learningRate);
+            const predict = (dataX) => {
+                return weight.mul(dataX).add(bias);
+            };
+            const loss = (predict, dataY) => {
+                return predict.sub(dataY).square().mean();
+            };
+        </script>
+
+        <!-- 정규화항 값, 학습 반복 -->
+        <script>
+            const lambda = 0.3;
+            const regularizer = tf.regularizers.l1({ l1: lambda });
+            const regularLoss = (predict, dataY) => {
+                const value = regularizer.apply(weight);
+                return loss(predict, dataY).add(value);
+            };
+            for (let k = 0; k < 400; k++) {
+                optimizer.minimize(() => {
+                    const pred = predict(trainX);
+                    return regularLoss(pred, trainY);
+                });
+            }
+        </script>
+    </body>
+</html>
