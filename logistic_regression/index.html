@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>로지스틱 회귀</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 정규화 -->
+        <script>
+            const dataX = tensor.iris.getData("x", 3);
+            const names = tensor.iris.getData("y", 4);
+            /*
+                꽃 종류
+                0: Iris-setosa,
+                1: Iris-versicolor
+                2: Iris-virginica
+            */
+            const dataY = names.map(function (name) {
+                return name === "iris-virgincia" ? 1 : 0;
+            });
+
+            const trainX = tf.tensor1d(dataX);
+            const traniY = tf.tensor1d(dataY);
+        </script>
+
+        <!-- 시그모이드 함수 -->
+        <script>
+            /*
+                시그모이드 함수를 로지스틱 함수라고 부르지만
+                일반적으로 시그모이드 함수를 더 많이 사용
+            */
+            // tf.linspace(-5, 5, 100)
+            // -5와 5 사이에서 간격이 같은 (등차 수열) 값을 100개 반환하여 X데이터로 사용
+            const dataX2 = tf.linspace(-5, 5, 100);
+            // tf.sigmoid(dataX2);
+            // X값에 대한 시그모이드 함수 값을 반환하며 반환 값을 Y데이터로 사용
+            const dataY2 = tf.sigmoid(dataX2);
+        </script>
+    </body>
+</html>
