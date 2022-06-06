@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>활성화 함수</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 활성화 함수를 함수 형태로 호출 -->
+        <script>
+            const data = tf.linspace(-5, 5, 100);
+            tf.sigmoid(data);
+            data.sigmoid(); // 같은 방법
+        </script>
+
+        <!-- 프로퍼티에 작성 -->
+        <script>
+            const model = tf.sequential();
+            model.add(tf.layers.dense({ activation: "relu" }));
+            model.add(tf.layers.dense({ activation: "sigmoid" }));
+        </script>
+
+        <!-- hardSigmoid -->
+        <script>
+            /*
+                {activation: 'hardSigmoid'} 형태로 사용할 수 있지만
+                tf.hardSigmoid() 함수가 없으므로
+                수학식을 기준으로 코드 작성
+            */
+            const dataX = tf.linspace(-5, 5, 100);
+            // dataX에 0.2를 곱하고 0.5를 더함
+            const value = tf.add(tf.mul(dataX, tf.scalar(0.2)), tf.scalar(0.5));
+            // tf.clipByValue(value, 0, 1) 두 번째 파라미터에 최소값 작성, 세번째 최대값
+            const dataY = tf.clipByValue(value, 0, 1);
+            /*
+                value i번째 값이 0보다 작으면 0 반환
+                1보다 크면 1을 반환
+                아니면 value의 i번째 값 반환
+            */
+        </script>
+
+        <!-- step -->
+        <script>
+            const dataX2 = tf.linspace(-5, 5, 100);
+            const dataY2 = tf.step(dataX2, 0.5);
+            /*
+                tf.setp()의 두번째 파라미터에 0.5를 작성
+                dataX가 0보다 크면 1 반환
+                dataX가 0보다 작으면 0.5를 반환
+                dataX가 0일때는 0을 반환
+            */
+        </script>
+
+        <!-- ReLU -->
+        <script>
+            const dataX3 = tf.linspace(-5, 5, 100);
+            const dataY3 = tf.relu(dataX3);
+            /*
+                x가 0 이하이면 y는 0이 되며
+                y가 0이면 기울기가 0이 됨
+
+                기울기가 0이면 기울기를 구하는 알고리즘이
+                기울기를 구하지 않게 됨
+
+                즉, 최소값을 찾은 것이므로
+                학습을 계속하지 않게됨
+
+                이것이 ReLU 함수의 특징
+                한편으로 고려사항이기도 함
+
+                강좌를 만드는 시점에 가장 많이 선택하는
+                활성화 함수로 알려져 있음
+                즉, 활성화 함수를 선택하기 어려우면
+                먼저 ReLU 함수를 사용한다는 뜻
+            */
+        </script>
+
+        <!-- LeakyReLU -->
+        <script>
+            const dataX4 = tf.linspace(-3, 3, 100);
+            const dataY4 = tf.leakyRelu(dataX4, 0.2);
+            /* 
+                leakyRelu() 함수의 두번째 파라미터에 알파 자것ㅇ
+                디폴트 값 0.2
+
+                x가 0보다 작을 때도 y가 0이 되지 않으므로
+                학습을 계속하게 됨
+            */
+        </script>
+
+        <!-- ReLU6 -->
+        <script>
+            /*
+                version 1.2.10에서 relu6() 함수가 생김
+                이전에는 {activation: 'relu6'} 형태만 사용
+            */
+            const dataX5 = tf.linspace(-10, 10, 100);
+            const dataY5 = tf.relu6(dataX5);
+        </script>
+    </body>
+</html>
