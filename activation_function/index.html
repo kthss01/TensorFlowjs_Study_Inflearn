@@ -100,5 +100,49 @@
             const dataX5 = tf.linspace(-10, 10, 100);
             const dataY5 = tf.relu6(dataX5);
         </script>
+
+        <!-- softplus -->
+        <script>
+            /*
+                softplus 식을 자바스크립트로 풀어 쓰면
+                Math.log(1 + Math.exp(x))
+            */
+            const dataX6 = tf.linspace(-5, 5, 100);
+            const dataY6 = tf.softplus(dataX6);
+        </script>
+
+        <!-- tanh -->
+        <script>
+            const dataX7 = tf.linspace(-5, 5, 100);
+            const dataY7 = tf.tanh(dataX6);
+        </script>
+
+        <!-- softsign -->
+        <script>
+            /*
+                tf.softsign() 함수가 없지만
+                {activation: 'softsign'} 형태는 사용 가능
+            */
+            const dataX8 = tf.linspace(-5, 5, 100);
+            const dataY8 = dataX8.div(tf.add(tf.scalar(1.0), tf.abs(dataX8)));
+        </script>
+
+        <!-- ELU -->
+        <script>
+            const dataX9 = tf.linspace(-5, 5, 100);
+            const dataY9 = tf.elu(dataX9);
+        </script>
+
+        <!-- SELU -->
+        <script>
+            /*
+                alpha 상수 1.7580993408473768...
+                scale 상수 1.0507009873554804...
+
+                TF.js 내부 변수에 상수로 작성되어 있음
+            */
+            const dataX10 = tf.linspace(-5, 5, 100);
+            const dataY10 = tf.selu(dataX10);
+        </script>
     </body>
 </html>

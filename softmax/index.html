@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>소프트맥스</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <!-- 소프트맥스 함수 -->
+        <script>
+            const dataX = tf.linspace(-5, 5, 5);
+            const dataY = tf.softmax(dataX);
+        </script>
+
+        <!-- One-Hot 인코딩 -->
+        <script>
+            // X 데이터 정의
+            /*
+                꽃잎 길이와 넓이를 X 데이터로 사용
+            */
+            const irisX = [
+                [1.5, 0.2],
+                [1.5, 0.4],
+                [4.7, 1.4],
+                [5, 1.7],
+                [5.1, 1.9],
+                [4.5, 1.7],
+            ];
+            const trainX = tf.tensor2d(irisX);
+
+            // Y 데이터 정의
+            /*
+                꽃 이름이 문자열이므로
+                꽃 이름을 irisX의 각 1차원 배열에 대응하도록
+                숫자 클래스로 정규화
+
+                irisX가 행렬이므로 irisY도 행렬이어야 하지만
+                tf.oneHot() 함수에서 행렬로 변환하므로
+                벡터(1차원 배열)로 작성
+                
+                행렬로 작성하면 tf.oneHot() 함수에서 에러 발생
+            */
+            const irisY = [0, 0, 1, 1, 2, 2];
+
+            // One-Hot 인코딩
+            /*
+                tf.oneHot(irisY, 3);
+                One-Hot 형태를 가진 tf.Tensor를 생성
+
+                첫 번째 파라미터에 Y 데이터를 작성하고
+                두 번쨰 파라미터에 One-Hot 크기를 작성
+
+                즉, Y 데이터의 클래스 수를 작성하며
+                클래스가 0, 1, 2 이므로 3을 작성
+                0번 비트, 1번 비트, 2번 비트 형태
+            */
+            const trainY = tf.oneHot(irisY, 3);
+            tf.print(trainY);
+
+            /*
+                실행 결과 설명
+                출력된 형태가 One-Hot 인코딩 형태
+                앞의 2개는 0번 비트, 다음의 2개는 1번 비트에만
+                또 다음의 2개는 2번 비트에만 1이 설정
+                이렇게 만든 후에 가장 큰 비트를 추출하면 
+                비트에 해당하는 클래스를 구할 수 있으며
+                클래스에 해당하는 꽃 이름을 구할 수 있음
+
+                *실행결과
+                [[1, 0, 0], [1, 0, 0], [0, 1, 0], [0, 1, 0], [0, 0, 1], [0, 0, 1]]
+            */
+        </script>
+    </body>
+</html>
