@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>소프트맥스 회귀 모델</title>
+        <!-- TensorFlow.js 사용을 위한 스크립트 태그 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <script>
+            // X 데이터 정의
+            /*
+                꽃잎 기링[2]와 넓이 [3]을 X 데이터로 사용
+                X 데이터의 엘리먼트 2개
+            */
+            const irisX = tensor.iris.getData([2, 3]);
+            const trainX = tf.tensor2d(irisX);
+
+            // 학습 Y 데이터 정의, 정규화
+            /*
+                붓꽃 이름을 Y 데이터로 사용
+                꽃 이름이 문자열이므로
+                숫자 클래스로 정규화
+            */
+            const irisNames = tensor.iris.getData(4);
+            const callback = (name) => {
+                if (name === "Iris-setosa") {
+                    return 0;
+                }
+                return name === "Iris-versicolor" ? 1 : 2;
+            };
+            const irisY = irisNames.map(callback);
+
+            // One-Hot 인코딩
+            /*
+                앞에서 정규화한 클래스로 One-Hot 인코딩 만듬
+                클래스가 3개이므로 3개의 비트를 만듬
+                비트 값은 int32 타입이며
+                이어지는 처리에서 실수 계산을 하므로
+                float32 타입으로 변환
+                TF.js에서 ES6의 TypedArray 오브젝트의
+                float 메소드로 계산하기 때문
+            */
+            const oneHotY = tf.oneHot(irisY, 3);
+            const trainY = tf.cast(oneHotY, "float32");
+
+            // 가중치, 바이어스, 옵티마이저
+            /*
+                가중치와 바이어스의 초기값을 설정
+                [2, 3]에서 2는 X 데이터의 엘리먼트 수
+                3은 클래스 수
+                bias의 [3]은 클래스 수
+                Adam 옵티마이저를 생성
+            */
+            const weight = tf.variable(
+                tf.randomNormal([2, 3], 0, 1, "float32", 701),
+                true,
+                "weight"
+            );
+
+            const bias = tf.variable(
+                tf.randomNormal([3], 0, 1, "float32", 702),
+                true,
+                "bias"
+            );
+
+            const learningRate = 0.3;
+            const optimizer = tf.train.adam(learningRate);
+
+            // 손실함수
+            /*
+                X 데이터에 가중치를 곱하고 바이어스를 더해 로짓을 구함
+                trainX.matMul(weight)
+                    내적(dot-product) 방법으로 X 데이터와 가중치를 곱함
+                    X 데이터도 행렬이고 가중치도 행렬
+                softmaxCrossEntropy(trainY, logit)
+                    첫 번째 파라미터에 One-Hot을 작성하며
+                    손실함수 값을 반환
+            */
+            function loss() {
+                const logit = trainX.matMul(weight).add(bias);
+                return tf.losses.softmaxCrossEntropy(trainY, logit);
+            }
+
+            // 모델 학습
+            /*
+                500번 반복하면 <table>에 6개가 아니라 7개 출력
+                    => 학습이 덜 된거라거 table에 예측 결과 다른게 나옴
+                반복 횟수는 모델 학습에 영향을 미침
+                loss() 함수에서 반환된 손실함수 값을
+                    minimize() 함수로 return
+            */
+            const loop = 1000;
+            function train() {
+                for (let k = 0; k < loop; k++) {
+                    optimizer.minimize(() => {
+                        return loss();
+                    });
+                }
+            }
+
+            // 확률 값 계산
+            /*
+                학습 X 데이터 전체를 예측 데이터로 사용
+                학습 결과와 예측 결과를 직관적으로 비교하기 위해서
+
+                trainX.matMul(weight)
+                    내적(dot-product) 방법으로
+                    예측 데이터와 가중치를 곱함
+
+                바이어스를 더하고 tf.softmax()를 호출하면
+                확률 값을 반환
+
+                predict에 [[0.95, 0.02, 0.03]]처럼 설정됨
+            */
+            const predict = trainX.matMul(weight).add(bias).softmax();
+
+            // One-Hot 비교
+            /*
+                tf.unstack()은 랭크를 하나 줄이며
+                2차원 배열을 1차원 배열로 변환
+
+                predcit가 2차원 배열이므로 forEach()로 반복하기 위해
+                1차원 배열로 변환
+
+                forEach()의 pred에 [0.95, 0.02, 0.03]를 가진
+                tf.Tensor가 설정됨
+
+                tf.argMax(pred)는
+                pred에서 가장 큰 값의 인덱스를 반환
+
+                즉, One-Hot의 비트 인덱스를 반환
+                [0.95, 0.02, 0.03]에서 0.95의 인덱스인 0 반환
+
+                dataSync()
+                tf.Tensor에 설정된 값을 반환
+
+                인덱스를 구했으니 이후 처리는
+                Y 데이터의 클래스와 비교하고 출력하는 것
+            */
+            tf.unstack(predict).forEach((pred) => {
+                const maxIndex = tf.argMax(pred).dataSync();
+            });
+        </script>
+    </body>
+</html>
